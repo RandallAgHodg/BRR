@@ -1,5 +1,4 @@
-﻿
-
+﻿using BRR.Contracts.Users;
 using Microsoft.AspNetCore.Identity;
 
 namespace BRR.Domain.Entities;
@@ -22,6 +21,15 @@ public class AppUser : IdentityUser<int>
             PhoneNumber = phonenumber,
             Gender = gender
         };
+    }
+
+    public static implicit operator UserReponse(AppUser user)
+    {
+        return new UserReponse(user.Id, user.FirstName, 
+            user.SecondName, user.LastName, 
+            user.SecondLastName, user.Email, 
+            user.Password, user.Age, 
+            user.PhoneNumber, user.Gender);
     }
 
     public int Id { get; init; }

@@ -1,10 +1,12 @@
 ﻿using BRR.Application.Abstractions.Authentication;
 using BRR.Domain.Entities;
+using BRR.Domain.Repositories;
 using BRR.Infrastructure.Authentication;
 using BRR.Infrastructure.Authentication.Options;
 using BRR.Infrastructure.Authentication.Validation;
 using BRR.Infrastructure.Database;
 using BRR.Infrastructure.Database.Options;
+using BRR.Infrastructure.Repositories;
 using BRRR.Infrastructure.Database.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -59,13 +61,22 @@ public static class ConfigureDependencies
         );
 
         services.AddScoped<IUserValidator<AppUser>, CustomUserValidator>();
-        
-        services.AddIdentity<AppUser, AppRole>()
+
+        services.AddScoped<IUserRepository, UserRepository>();
+
+        services.AddIdentity<AppUser, AppRole>(options =>
+        {
+            options.Password.RequireNonAlphanumeric = false;
+            options.Password.RequireDigit = false;
+            options.Password.RequireLowercase = false;
+            options.Password.RequiredLength = 1;
+            options.Password.RequireUppercase = false;
+            options.Password.RequireLowercase = false;
+        })
             .AddEntityFrameworkStores<BRRDbContext>()
             .AddUserValidator<CustomUserValidator>()
             .AddDefaultTokenProviders();
-
-        
         return services;
+
     }
 }

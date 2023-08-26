@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Repositories\" />
+    <ProjectReference Include="..\BRR.Contracts\BRR.Contracts.csproj" />
   </ItemGroup>
 
 </Project>

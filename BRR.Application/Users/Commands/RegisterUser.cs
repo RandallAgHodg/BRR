@@ -1,5 +1,5 @@
 ﻿using BRR.Application.Abstractions.Messaging;
-using MediatR;
+using BRR.Contracts.Users;
 
 namespace BRR.Application.Users.Commands;
 
@@ -14,4 +14,4 @@ public sealed record RegisterUserCommand(
     string PhoneNumber,
     string Gender,
     string Role
-) : ICommand<string>;
+) : ICommand<AuthResponse>;
