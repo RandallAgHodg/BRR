@@ -67,6 +67,25 @@ public sealed class UserConfiguration : IEntityTypeConfiguration<AppUser>
             .HasColumnName("eliminado")
             .HasDefaultValue(false);
 
+        builder.Property(x => x.IsAgent)
+            .HasColumnName("es_agente")
+            .HasDefaultValue(false);
+
+        builder.Property(x => x.AgentId)
+            .HasColumnName("id_agente")
+            .IsRequired(false);
+
+        builder
+            .HasMany(x => x.Clients)
+            .WithOne(x => x.Agent)
+            .OnDelete(DeleteBehavior.NoAction);
+
+        builder
+            .HasOne(x => x.Agent)
+            .WithMany(x => x.Clients)
+            .HasForeignKey(x => x.AgentId)
+            .OnDelete(DeleteBehavior.NoAction);
+
         builder.HasQueryFilter(x => !x.deleted);
     }
 }

@@ -1,6 +1,7 @@
 using BRR.WebAPI;
 using BRR.Infrastructure;
 using BRR.Application;
+using BRR.WebAPI.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,7 @@ services
     .AddOpenAPISupport()
     .AddSwaggerGen()
     .AddJWTAuthentication()
+    .AddFileStorage()
     .AddAplication()
     .AddInfrastructure();
 
@@ -25,6 +27,7 @@ if (app.Environment.IsDevelopment())
         .UseSwaggerUI(options =>
             options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1"));
 
+app.UseMiddleware<GlobalExceptionMiddleware>();
 
 app
     .UseHttpsRedirection()

@@ -3,22 +3,20 @@
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="CloudinaryDotNet" />
     <PackageReference Include="FluentValidation" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" />
     <PackageReference Include="MediatR" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\BRR.Contracts\BRR.Contracts.csproj" />
     <ProjectReference Include="..\BRR.Domain\BRR.Domain.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Users\Queries\" />
   </ItemGroup>
 
 </Project>

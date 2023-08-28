@@ -67,8 +67,9 @@ namespace BRR.Infrastructure.Migrations
                         .HasColumnType("TINYINT")
                         .HasColumnName("edad");
 
-                    b.Property<int?>("AppUserId")
-                        .HasColumnType("int");
+                    b.Property<int?>("AgentId")
+                        .HasColumnType("int")
+                        .HasColumnName("id_agente");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -92,6 +93,12 @@ namespace BRR.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("NVARCHAR(10)")
                         .HasColumnName("genero");
+
+                    b.Property<bool>("IsAgent")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false)
+                        .HasColumnName("es_agente");
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -162,7 +169,7 @@ namespace BRR.Infrastructure.Migrations
                     b.HasKey("Id")
                         .HasName("id");
 
-                    b.HasIndex("AppUserId");
+                    b.HasIndex("AgentId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -303,9 +310,13 @@ namespace BRR.Infrastructure.Migrations
 
             modelBuilder.Entity("BRR.Domain.Entities.AppUser", b =>
                 {
-                    b.HasOne("BRR.Domain.Entities.AppUser", null)
+                    b.HasOne("BRR.Domain.Entities.AppUser", "Agent")
                         .WithMany("Clients")
-                        .HasForeignKey("AppUserId");
+                        .HasForeignKey("AgentId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Agent");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>

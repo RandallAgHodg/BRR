@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace BRR.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -56,8 +56,9 @@ namespace BRR.Infrastructure.Migrations
                     telefono = table.Column<string>(type: "NVARCHAR(8)", maxLength: 8, nullable: false),
                     foto_perfil_url = table.Column<string>(type: "NVARCHAR(MAX)", nullable: true),
                     genero = table.Column<string>(type: "NVARCHAR(10)", nullable: false),
+                    id_agente = table.Column<int>(type: "int", nullable: true),
+                    es_agente = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
                     eliminado = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
-                    AppUserId = table.Column<int>(type: "int", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -75,8 +76,8 @@ namespace BRR.Infrastructure.Migrations
                 {
                     table.PrimaryKey("id", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Usuarios_Usuarios_AppUserId",
-                        column: x => x.AppUserId,
+                        name: "FK_Usuarios_Usuarios_id_agente",
+                        column: x => x.id_agente,
                         principalTable: "Usuarios",
                         principalColumn: "Id");
                 });
@@ -220,9 +221,9 @@ namespace BRR.Infrastructure.Migrations
                 column: "NormalizedEmail");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Usuarios_AppUserId",
+                name: "IX_Usuarios_id_agente",
                 table: "Usuarios",
-                column: "AppUserId");
+                column: "id_agente");
 
             migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
