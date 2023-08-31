@@ -9,10 +9,9 @@ public sealed class JWTBearerOptionSetup : IConfigureOptions<JwtBearerOptions>
 {
     private readonly JWTOptions _jwtOptions;
 
-    public JWTBearerOptionSetup(IOptions<JWTOptions> jwtOptions)
-    {
+    public JWTBearerOptionSetup(IOptions<JWTOptions> jwtOptions) =>
         _jwtOptions = jwtOptions.Value;
-    }
+    
 
     public void Configure(JwtBearerOptions options)
     {

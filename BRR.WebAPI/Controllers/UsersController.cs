@@ -6,8 +6,10 @@ using BRR.Application.Users.Commands.LoginUser;
 using BRR.Contracts.Requests.Users;
 using BRR.Application.Users.Queries.GetUserProfile;
 using BRR.Application.Users.Commands.AddClient;
-using BRR.WebAPI.Requests;
 using BRR.WebAPI.Extensions;
+using BRR.WebAPI.Requests;
+using BRR.Application.Abstractions.Messaging;
+using BRR.Application.Users.Queries.RefreshToken;
 
 namespace BRR.WebAPI.Controllers;
 
@@ -19,23 +21,24 @@ public class UsersController : ControllerBase
 
     public UsersController(IMediator mediator) =>
         _mediator = mediator;
-    
 
-    [HttpPost("users/register/")]
+
+    [HttpPost(ApiRoutes.Users.Register)]
     public async Task<IActionResult> Register([FromForm] RegisterRequest request)
     {
         var command = new RegisterUserCommand(request.FirstName, request.SecondName,
-            request.LastName, request.SecondLastName,
-            request.Email, request.Password,
-            request.Age, request.PhoneNumber,
-            request.Gender, request.Role, request.ProfilePicture.ToImageUploadParams());
+                                                request.LastName, request.SecondLastName,
+                                                request.Email, request.Password,
+                                                request.Age, request.PhoneNumber,
+                                                request.Gender, request.Role,
+                                                request.ProfilePicture.ToImageUploadParams());
 
-        var result =  await _mediator.Send(command);
-        
+        var result = await _mediator.Send(command);
+
         return Ok(result);
     }
 
-    [HttpPost("/users/login/")]
+    [HttpPost(ApiRoutes.Users.Login)]
     public async Task<IActionResult> Login([FromBody] LoginUserRequest request)
     {
         var command = new LoginUserCommand(request.Email, request.Password);
@@ -45,7 +48,7 @@ public class UsersController : ControllerBase
         return Ok(result);
     }
 
-    [HttpGet("/users/profile")]
+    [HttpGet(ApiRoutes.Users.Profile)]
     [Authorize]
     public async Task<IActionResult> GetProfile()
     {
@@ -56,7 +59,7 @@ public class UsersController : ControllerBase
         return Ok(result);
     }
 
-    [HttpPost("users/add-client")]
+    [HttpPost(ApiRoutes.Users.AddClient)]
     [Authorize]
     public async Task<IActionResult> AddClient([FromQuery] int clientId)
     {
@@ -67,4 +70,8 @@ public class UsersController : ControllerBase
         return Ok(result);
     }
 
+    [HttpGet(ApiRoutes.Users.RefreshToken)]
+    [Authorize]
+    public async Task<IActionResult> RefreshToken() =>
+        Ok(await _mediator.Send(new RefreshTokenQuery()));
 }

@@ -56,4 +56,9 @@ public static class ConfigureDependencies
 
         return services;
     }
+
+    public static IServiceCollection AddPresentation(this IServiceCollection services) =>
+        services.AddHttpContextAccessor().AddOpenAPISupport().AddSwaggerGen();
+    
+    
 }

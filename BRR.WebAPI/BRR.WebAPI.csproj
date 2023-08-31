@@ -26,4 +26,8 @@
     <ProjectReference Include="..\BRR.Infrastructure\BRR.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Houses\" />
+  </ItemGroup>
+
 </Project>

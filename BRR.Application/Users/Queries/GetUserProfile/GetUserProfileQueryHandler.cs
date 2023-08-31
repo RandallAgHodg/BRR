@@ -23,6 +23,10 @@ public sealed class GetUserProfileQueryHandler : IQueryHandler<GetUserProfileQue
     {
         var userId = _userInformationProvider.UserId;
 
+        if (userId is 0) 
+            throw new UserNotFoundException(
+                "No se pudo recuperar la informacion del usuario registrado");
+        
         var user = await _userRepository.FindByIdAsync(userId);
 
         IEnumerable<AppUser> clients = Enumerable.Empty<AppUser>();

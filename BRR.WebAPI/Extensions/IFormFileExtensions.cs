@@ -11,5 +11,13 @@ public static class IFormFileExtensions
         {
             File = new FileDescription(file.FileName, file.OpenReadStream())
         };
-    }  
+    }
+
+    public static VideoUploadParams ToVideoUploadParams(this IFormFile file)
+    {
+        return new VideoUploadParams()
+        {
+            File = new FileDescription(file.FileName, file.OpenReadStream()),
+        };
+    }
 }

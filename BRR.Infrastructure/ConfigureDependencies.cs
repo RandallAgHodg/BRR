@@ -61,7 +61,11 @@ public static class ConfigureDependencies
 
     public static IServiceCollection AddInfrastructure(this IServiceCollection services)
     {
-        services.ConfigureOptions<DatabaseOptionsSetup>();
+        services
+            .AddJWTAuthentication()
+            .AddAuthorization()
+            .AddFileStorage()
+            .ConfigureOptions<DatabaseOptionsSetup>();
 
         services.AddDbContext<BRRDbContext>(
             (serviceProvider, dbContextOptionsBuilder) =>
@@ -86,22 +90,27 @@ public static class ConfigureDependencies
 
         services.AddScoped<IUserRepository, UserRepository>();
 
+        services.AddScoped<IHouseRepository, HouseRepository>();    
+
         services.AddScoped<IFileStorerProvider, FileStorerProvider>();
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-        services.AddIdentity<AppUser, AppRole>(options =>
-        {
-            options.Password.RequireNonAlphanumeric = false;
-            options.Password.RequireDigit = false;
-            options.Password.RequireLowercase = false;
-            options.Password.RequiredLength = 1;
-            options.Password.RequireUppercase = false;
-            options.Password.RequireLowercase = false;
-        })
-            .AddEntityFrameworkStores<BRRDbContext>()
-            .AddUserValidator<CustomUserValidator>()
-            .AddDefaultTokenProviders();
+        services
+            .AddIdentity<AppUser, AppRole>(options =>
+            {
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireDigit = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequiredLength = 1;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireLowercase = false;
+            })
+                .AddEntityFrameworkStores<BRRDbContext>()
+                .AddUserValidator<CustomUserValidator>()
+                .AddDefaultTokenProviders();
+
+        
         return services;
 
     }

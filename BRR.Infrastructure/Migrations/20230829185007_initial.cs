@@ -188,6 +188,40 @@ namespace BRR.Infrastructure.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Inmuebles",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    foto_url = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    video_url = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    titulo = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    area = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    precio = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    descuento = table.Column<int>(type: "int", nullable: false),
+                    dormitorios = table.Column<int>(type: "int", nullable: false),
+                    baños = table.Column<int>(type: "int", nullable: false),
+                    habitaciones = table.Column<int>(type: "int", nullable: false),
+                    pisos = table.Column<int>(type: "int", nullable: false),
+                    piscina = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    balcon = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    vendida = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    aprobada = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    id_cliente = table.Column<int>(type: "int", nullable: false),
+                    eliminado = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Inmuebles", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Inmuebles_Usuarios_id_cliente",
+                        column: x => x.id_cliente,
+                        principalTable: "Usuarios",
+                        principalColumn: "Id");
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -214,6 +248,11 @@ namespace BRR.Infrastructure.Migrations
                 name: "IX_AspNetUserRoles_RoleId",
                 table: "AspNetUserRoles",
                 column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Inmuebles_id_cliente",
+                table: "Inmuebles",
+                column: "id_cliente");
 
             migrationBuilder.CreateIndex(
                 name: "EmailIndex",
@@ -250,6 +289,9 @@ namespace BRR.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "Inmuebles");
 
             migrationBuilder.DropTable(
                 name: "Roles");

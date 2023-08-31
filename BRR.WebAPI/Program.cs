@@ -5,18 +5,16 @@ using BRR.WebAPI.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//servicios
+
 var services = builder.Services;
 
-services
-    .AddControllers();
+services.AddControllers();
 
 services
-    .AddOpenAPISupport()
-    .AddSwaggerGen()
-    .AddJWTAuthentication()
-    .AddFileStorage()
     .AddAplication()
-    .AddInfrastructure();
+    .AddInfrastructure()
+    .AddPresentation();
 
 var app = builder.Build();
 
@@ -24,15 +22,18 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
     app
         .UseSwagger()
-        .UseSwaggerUI(options =>
-            options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1"));
+        .UseSwaggerUI();
 
-app.UseMiddleware<GlobalExceptionMiddleware>();
+//cors
+
+
+// midlewares
 
 app
+    .UseMiddleware<GlobalExceptionMiddleware>()
     .UseHttpsRedirection()
-    .UseAuthorization()
-    .UseAuthentication();
+    .UseAuthentication()
+    .UseAuthorization();
 
 app.MapControllers();
 

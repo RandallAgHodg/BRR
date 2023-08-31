@@ -41,9 +41,20 @@ public sealed class GlobalExceptionMiddleware
             }
 
         }
-        catch (NotFoundException exception) 
+        catch (NotFoundException exception)
         {
             context.Response.StatusCode = StatusCodes.Status404NotFound;
+
+            var messages = new[] { exception.Message };
+
+            await context
+                .Response
+                .WriteAsJsonAsync(
+                new ValidationFailureResponse(messages.ToList()));
+        }
+        catch (ForbiddenException exception)
+        {
+            context.Response.StatusCode = StatusCodes.Status403Forbidden;
 
             var messages = new[] { exception.Message };
 

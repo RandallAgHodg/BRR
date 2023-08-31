@@ -14,8 +14,29 @@ public sealed class FileStorerProvider : IFileStorerProvider
 
     public async Task<string> UploadImageAsync(ImageUploadParams imageParams)
     {
-        var result = await _fileStorer.UploadAsync(imageParams); ;
+        try
+        {
+            var result = await _fileStorer.UploadAsync(imageParams); ;
 
-        return result.Url.AbsoluteUri;
+            return result.Url.AbsoluteUri;
+        }
+        catch (Exception exception)
+        {
+            throw;
+        }
+    }
+
+    public async Task<string> UploadVideoAsync(VideoUploadParams videoParams)
+    {
+        try
+        {
+            var result = await _fileStorer.UploadAsync(videoParams);
+
+            return result.Url.AbsoluteUri;
+        }
+        catch (Exception exception)
+        {
+            throw;
+        }
     }
 }

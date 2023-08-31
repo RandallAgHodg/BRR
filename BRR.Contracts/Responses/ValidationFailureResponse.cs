@@ -2,10 +2,10 @@
 
 public sealed record ValidationFailureResponse
 {
-    public ValidationFailureResponse(IEnumerable<string> messages)
+    public ValidationFailureResponse(IEnumerable<string> errors)
     {
-        this.Errors = messages;
+        Errors = errors;
     }
 
-    public IEnumerable<string> Errors { get; private set; } = Enumerable.Empty<string>();
+    public IEnumerable<string> Errors { get; init; } = Enumerable.Empty<string>();
 }

@@ -25,6 +25,9 @@ public sealed class RegisterClientCommandHandler : ICommandHandler<RegisterClien
     {
         var loggedUserId = _userInformationProvider.UserId;
 
+        if (loggedUserId == request.clientId)
+            throw new CantAddYourselfAsAClientException();
+
         var client = await _userRepository.FindByIdAsync(request.clientId);
 
         if (client is null)

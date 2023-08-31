@@ -38,4 +38,10 @@ public sealed class UserRepository : IUserRepository
         .Set<AppUser>()
         .Where(x => x.AgentId == AgentId)
         .ToListAsync();
+
+    public async Task<AppUser> GetClientAgentAsync(int clientId)
+    {
+        throw new NotImplementedException();
+
+    }
 }
