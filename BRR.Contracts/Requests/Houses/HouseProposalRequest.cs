@@ -13,4 +13,5 @@ public class HouseProposalRequest
     public int Floors { get; init; }
     public bool HasPool { get; init; }
     public bool HasBalcony { get; init; }
+    public bool OnSale { get; set; }
 }

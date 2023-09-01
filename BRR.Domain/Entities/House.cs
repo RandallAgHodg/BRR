@@ -57,14 +57,22 @@ public sealed class House
         };
     }
 
-    public void Accept () => IsAccepted = true;
-
+    public void Accept ()
+    {
+        IsAccepted = true;
+        IsRejected = false;
+    }
+    public void Reject()
+    {
+        IsAccepted = false;
+        IsRejected = true;
+    }
     public void SetClient(AppUser user)
     {
         ClientId = user.Id;
         Client = user;
     }
-
+    public void Delete () => IsDeleted = true;
     public void UpdateInformation(House house)
     {
         Id = house.Id;
@@ -102,5 +110,6 @@ public sealed class House
     public int ClientId { get; private set; }
     public AppUser Client { get; private set; }
     public bool IsDeleted { get; private set; }
-
+    public bool OnSale { get; private set; }
+    public bool IsRejected { get; private set; }
 }

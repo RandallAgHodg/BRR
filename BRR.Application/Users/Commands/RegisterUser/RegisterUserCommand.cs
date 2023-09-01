@@ -14,6 +14,5 @@ public sealed record RegisterUserCommand(
     int Age,
     string PhoneNumber,
     string Gender,
-    string Role,
     ImageUploadParams ProfilePicture
 ) : ICommand<AuthResponse>;

@@ -30,7 +30,7 @@ public class UsersController : ControllerBase
                                                 request.LastName, request.SecondLastName,
                                                 request.Email, request.Password,
                                                 request.Age, request.PhoneNumber,
-                                                request.Gender, request.Role,
+                                                request.Gender,
                                                 request.ProfilePicture.ToImageUploadParams());
 
         var result = await _mediator.Send(command);

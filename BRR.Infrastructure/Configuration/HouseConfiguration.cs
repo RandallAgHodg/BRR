@@ -83,6 +83,15 @@ public sealed class HouseConfiguration : IEntityTypeConfiguration<House>
             .HasColumnName("aprobada")
             .HasDefaultValue(false);
 
+        builder.Property(x => x.OnSale)
+            .IsRequired()
+            .HasColumnName("en_venta");
 
+        builder.Property(x => x.IsRejected)
+            .IsRequired()
+            .HasDefaultValue(false)
+            .HasColumnName("rechazada");
+
+        builder.HasQueryFilter(x => !x.IsDeleted && !x.IsRejected);
     }
 }

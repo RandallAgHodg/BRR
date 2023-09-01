@@ -4,6 +4,7 @@ using BRR.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BRR.Infrastructure.Migrations
 {
     [DbContext(typeof(BRRDbContext))]
-    partial class BRRDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230901183551_adding-properties-houses-table")]
+    partial class addingpropertieshousestable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -243,10 +246,7 @@ namespace BRR.Infrastructure.Migrations
                         .HasColumnName("eliminado");
 
                     b.Property<bool>("IsRejected")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false)
-                        .HasColumnName("rechazada");
+                        .HasColumnType("bit");
 
                     b.Property<bool>("IsSold")
                         .ValueGeneratedOnAdd()

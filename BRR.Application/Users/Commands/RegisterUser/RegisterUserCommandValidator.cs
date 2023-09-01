@@ -9,48 +9,35 @@ public sealed class RegisterUserCommandValidator : AbstractValidator<RegisterUse
     public RegisterUserCommandValidator()
     {
         RuleFor(x => x.FirstName)
-            .NotEmpty()
-            .WithError(ValidationErrors.User.UserFieldIsRequired("Primer nombre"));
+            .IsRequired("primer nombre");
 
         RuleFor(x => x.SecondName)
-            .NotEmpty()
-            .WithError(ValidationErrors.User.UserFieldIsRequired("Segundo nombre"));
+            .IsRequired("segundo nombre");
 
         RuleFor(x => x.LastName)
-          .NotEmpty()
-          .WithError(ValidationErrors.User.UserFieldIsRequired("Primer apellido"));
+            .IsRequired("apellido");
 
         RuleFor(x => x.SecondLastName)
-          .NotEmpty()
-          .WithError(ValidationErrors.User.UserFieldIsRequired("Segundo apellido"));
+            .IsRequired("segundo apellido");
 
         RuleFor(x => x.Age)
-            .NotEmpty()
-            .WithError(ValidationErrors.User.UserFieldIsRequired("edad"))
+            .IsRequired("edad")
             .GreaterThan(0)
             .WithError(ValidationErrors.User.AgeHasBePositive);
 
         RuleFor(x => x.Password)
-            .NotEmpty()
-            .WithError(ValidationErrors.User.UserFieldIsRequired("contraseña"));
+            .IsRequired("contraseña");
 
         RuleFor(x => x.PhoneNumber)
-            .NotEmpty()
-            .WithError(ValidationErrors.User.UserFieldIsRequired("Telefono"));
+            .IsRequired("telefono");
 
         RuleFor(x => x.Gender)
-            .NotEmpty()
-            .WithError(ValidationErrors.User.UserFieldIsRequired("Genero"));
+            .IsRequired("genero");
 
         RuleFor(x => x.Email)
-            .NotEmpty()
-            .WithMessage("AAAAA")
-            .WithError(ValidationErrors.User.UserFieldIsRequired("correo"))
+            .IsRequired("correo")
             .EmailAddress(FluentValidation.Validators.EmailValidationMode.AspNetCoreCompatible)
             .WithError(ValidationErrors.User.EmailInvalid);
 
-        RuleFor(x => x.Role)
-            .NotEmpty()
-            .WithError(ValidationErrors.User.UserFieldIsRequired("rol"));
     }
 }
