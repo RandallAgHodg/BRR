@@ -10,7 +10,7 @@ using BRR.Domain.UOW;
 
 namespace BRR.Application.Houses.Commands.UpdateHouseInformation;
 
-public sealed class UpdateHouseInformationCommandHandler : ICommandHandler<UpdateHouseCommand, HouseResponse>
+public sealed class UpdateHouseInformationCommandHandler : ICommandHandler<UpdateHouseInformationCommand, HouseResponse>
 {
     private readonly IHouseRepository _houseRepository;
     private readonly IUserInformationProvider _userInformationProvider;
@@ -27,7 +27,7 @@ public sealed class UpdateHouseInformationCommandHandler : ICommandHandler<Updat
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<HouseResponse> Handle(UpdateHouseCommand request, CancellationToken cancellationToken)
+    public async Task<HouseResponse> Handle(UpdateHouseInformationCommand request, CancellationToken cancellationToken)
     {
         var loggedUserId = _userInformationProvider.UserId;
 

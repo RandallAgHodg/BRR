@@ -1,5 +1,8 @@
 ﻿using BRR.Application.Houses.Commands.ApproveHouseProposal;
+using BRR.Application.Houses.Commands.DeleteHouse;
+using BRR.Application.Houses.Commands.RejectHouseProposal;
 using BRR.Application.Houses.Commands.SendHouseProposal;
+using BRR.Application.Houses.Commands.UpdateHouseInformation;
 using BRR.Application.Houses.Queries.GetTop5Houses;
 using BRR.Application.Houses.Queries.SearchHouses;
 using BRR.Contracts.Requests.Houses;
@@ -60,5 +63,38 @@ public class HousesController : ControllerBase
         var result = await _mediatr.Send(query);
 
         return Ok(result);  
+    }
+
+    [HttpPut(ApiRoutes.Houses.UpdateHouseInformation)]
+    public async Task<IActionResult> Update([FromQuery] int userId, [FromBody] UpdateHouseInformationRequest request)
+    {
+        var command = new UpdateHouseInformationCommand(userId, request.Title, request.Address,
+            request.Area, request.Price, request.Discount, request.Bedrooms, request.Bathrooms,
+            request.Livingrooms,request.Floors, request.Picture.ToImageUploadParams(), 
+            request.Picture.ToVideoUploadParams(), request.HasPool, request.HasBalcony);
+
+        var result = await _mediatr.Send(command);
+
+        return Ok(result);  
+    }
+
+    [HttpPost(ApiRoutes.Houses.RejectHouse)]
+    public async Task<IActionResult> Reject([FromQuery] int houseId)
+    {
+        var command = new RejectHouseProposalCommand(houseId);
+
+        var result = await _mediatr.Send(command);
+
+        return Ok(result);
+    }
+
+    [HttpDelete(ApiRoutes.Houses.DeleteHouse)]
+    public async Task<IActionResult> Delete([FromQuery] int houseId)
+    {
+        var command = new DeleteHouseCommand(houseId);
+
+        var result = await _mediatr.Send(command);
+
+        return Ok(result);
     }
 }

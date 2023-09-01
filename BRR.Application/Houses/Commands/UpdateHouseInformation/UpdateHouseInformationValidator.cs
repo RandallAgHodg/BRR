@@ -4,7 +4,7 @@ using FluentValidation;
 
 namespace BRR.Application.Houses.Commands.UpdateHouseInformation;
 
-public sealed class UpdateHouseInformationValidator : AbstractValidator<UpdateHouseCommand>
+public sealed class UpdateHouseInformationValidator : AbstractValidator<UpdateHouseInformationCommand>
 {
     public UpdateHouseInformationValidator()
     {

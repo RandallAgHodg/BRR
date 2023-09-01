@@ -25,10 +25,14 @@ public static class ApiRoutes
 
         public const string SendHouseProposal = $"{Base}/send-house-proposal";
 
-        public const string ApproveHouseProposal = $"{Base}/approve-house-proposal";
+        public const string ApproveHouseProposal = $"{Base}/approve-house-proposal/{{houseId:int}}";
 
         public const string GetTop5HousesByDiscount = $"{Base}/discount";
 
         public const string SearchHouses = $"{Base}/search";
+
+        public const string UpdateHouseInformation = $"{Base}/{{houseId:int}}";
+        public const string DeleteHouse = $"{Base}/{{houseId:int}}";
+        public const string RejectHouse = $"{Base}/{{houseId:int}}";
     }
 }
