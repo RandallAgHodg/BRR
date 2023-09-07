@@ -22,37 +22,7 @@ namespace BRR.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("BRR.Domain.Entities.AppRole", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("NormalizedName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedName")
-                        .IsUnique()
-                        .HasDatabaseName("RoleNameIndex")
-                        .HasFilter("[NormalizedName] IS NOT NULL");
-
-                    b.ToTable("AspNetRoles", (string)null);
-                });
-
-            modelBuilder.Entity("BRR.Domain.Entities.AppUser", b =>
+            modelBuilder.Entity("BRR.Domain.Entities.Account", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -63,14 +33,6 @@ namespace BRR.Infrastructure.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<byte>("Age")
-                        .HasColumnType("TINYINT")
-                        .HasColumnName("edad");
-
-                    b.Property<int?>("AgentId")
-                        .HasColumnType("int")
-                        .HasColumnName("id_agente");
-
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
@@ -78,32 +40,33 @@ namespace BRR.Infrastructure.Migrations
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(256)
-                        .HasColumnType("NVARCHAR(40)")
-                        .HasColumnName("correo");
+                        .HasColumnType("nvarchar(256)")
+                        .HasColumnName("email");
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("NVARCHAR(40)")
-                        .HasColumnName("primer_nombre");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("nombre");
 
-                    b.Property<string>("Gender")
-                        .IsRequired()
-                        .HasColumnType("NVARCHAR(10)")
-                        .HasColumnName("genero");
-
-                    b.Property<bool>("IsAgent")
+                    b.Property<bool>("IsConfirmed")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(false)
-                        .HasColumnName("es_agente");
+                        .HasColumnName("confirmado");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false)
+                        .HasColumnName("eliminado");
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnType("NVARCHAR(40)")
-                        .HasColumnName("primer_apellido");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("apellido");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -119,39 +82,37 @@ namespace BRR.Infrastructure.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("NVARCHAR(40)")
-                        .HasColumnName("contraseña");
-
                     b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("contraseña");
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
-                        .HasMaxLength(8)
-                        .HasColumnType("NVARCHAR(8)")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("telefono");
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
                     b.Property<string>("PictureUrl")
-                        .HasColumnType("NVARCHAR(MAX)")
-                        .HasColumnName("foto_perfil_url");
-
-                    b.Property<string>("SecondLastName")
                         .IsRequired()
-                        .HasColumnType("NVARCHAR(40)")
-                        .HasColumnName("segundo_apellido");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("foto_url");
 
-                    b.Property<string>("SecondName")
-                        .IsRequired()
-                        .HasColumnType("NVARCHAR(40)")
-                        .HasColumnName("segundo_nombre");
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int")
+                        .HasColumnName("id_rol");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(max)")
+                        .HasDefaultValue("e97a3434-43a6-4583-8164-1f333a3f327e9/7/2023 7:18:10 PM")
+                        .HasColumnName("token");
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
@@ -160,16 +121,7 @@ namespace BRR.Infrastructure.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<bool>("deleted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false)
-                        .HasColumnName("eliminado");
-
-                    b.HasKey("Id")
-                        .HasName("id");
-
-                    b.HasIndex("AgentId");
+                    b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -179,7 +131,53 @@ namespace BRR.Infrastructure.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.ToTable("Usuarios", (string)null);
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("Cuentas", (string)null);
+                });
+
+            modelBuilder.Entity("BRR.Domain.Entities.Agent", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("AccountId")
+                        .HasColumnType("int")
+                        .HasColumnName("id_cuenta");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccountId");
+
+                    b.ToTable("Agentes", (string)null);
+                });
+
+            modelBuilder.Entity("BRR.Domain.Entities.Client", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AccountId")
+                        .HasColumnType("int")
+                        .HasColumnName("id_cuenta");
+
+                    b.Property<int?>("AgentId")
+                        .HasColumnType("int")
+                        .HasColumnName("id_agente");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AccountId");
+
+                    b.HasIndex("AgentId");
+
+                    b.ToTable("Clientes", (string)null);
                 });
 
             modelBuilder.Entity("BRR.Domain.Entities.House", b =>
@@ -210,6 +208,9 @@ namespace BRR.Infrastructure.Migrations
                         .HasColumnType("int")
                         .HasColumnName("id_cliente");
 
+                    b.Property<int?>("ClientId1")
+                        .HasColumnType("int");
+
                     b.Property<int>("Discount")
                         .HasColumnType("int")
                         .HasColumnName("descuento");
@@ -229,6 +230,10 @@ namespace BRR.Infrastructure.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(false)
                         .HasColumnName("piscina");
+
+                    b.Property<int>("HouseTypeId")
+                        .HasColumnType("int")
+                        .HasColumnName("id_tipo");
 
                     b.Property<bool>("IsAccepted")
                         .ValueGeneratedOnAdd()
@@ -258,10 +263,6 @@ namespace BRR.Infrastructure.Migrations
                         .HasColumnType("int")
                         .HasColumnName("habitaciones");
 
-                    b.Property<bool>("OnSale")
-                        .HasColumnType("bit")
-                        .HasColumnName("en_venta");
-
                     b.Property<string>("PictureUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
@@ -285,15 +286,85 @@ namespace BRR.Infrastructure.Migrations
 
                     b.HasIndex("ClientId");
 
+                    b.HasIndex("ClientId1");
+
+                    b.HasIndex("HouseTypeId");
+
                     b.ToTable("Inmuebles", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
+            modelBuilder.Entity("BRR.Domain.Entities.HouseType", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("nombre");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TipoCasa", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "venta"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "alquiler"
+                        });
+                });
+
+            modelBuilder.Entity("BRR.Domain.Entities.Meeting", b =>
+                {
+                    b.Property<int>("HouseId")
+                        .HasColumnType("int")
+                        .HasColumnName("id_inmueble");
+
+                    b.Property<int>("AgentId")
+                        .HasColumnType("int")
+                        .HasColumnName("id_agente");
+
+                    b.Property<int>("ClientId")
+                        .HasColumnType("int")
+                        .HasColumnName("id_cliente");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("fecha_reunion");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("descripcion");
+
+                    b.HasKey("HouseId", "AgentId", "ClientId");
+
+                    b.HasIndex("AgentId");
+
+                    b.HasIndex("ClientId");
+
+                    b.ToTable("Reunion", (string)null);
+                });
+
+            modelBuilder.Entity("BRR.Domain.Entities.Role", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -304,11 +375,29 @@ namespace BRR.Infrastructure.Migrations
                         .HasColumnName("nombre");
 
                     b.Property<string>("NormalizedName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
+
                     b.ToTable("Roles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Agente"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Cliente"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -414,31 +503,98 @@ namespace BRR.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("BRR.Domain.Entities.AppUser", b =>
+            modelBuilder.Entity("BRR.Domain.Entities.Account", b =>
                 {
-                    b.HasOne("BRR.Domain.Entities.AppUser", "Agent")
-                        .WithMany("Clients")
-                        .HasForeignKey("AgentId")
+                    b.HasOne("BRR.Domain.Entities.Role", "Role")
+                        .WithMany("Accounts")
+                        .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
+
+                    b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("BRR.Domain.Entities.Agent", b =>
+                {
+                    b.HasOne("BRR.Domain.Entities.Account", "Account")
+                        .WithMany("Agents")
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.Navigation("Account");
+                });
+
+            modelBuilder.Entity("BRR.Domain.Entities.Client", b =>
+                {
+                    b.HasOne("BRR.Domain.Entities.Account", "Account")
+                        .WithMany("Clients")
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("BRR.Domain.Entities.Agent", "Agent")
+                        .WithMany("Clients")
+                        .HasForeignKey("AgentId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.Navigation("Account");
 
                     b.Navigation("Agent");
                 });
 
             modelBuilder.Entity("BRR.Domain.Entities.House", b =>
                 {
-                    b.HasOne("BRR.Domain.Entities.AppUser", "Client")
+                    b.HasOne("BRR.Domain.Entities.Client", "Client")
                         .WithMany()
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
+                    b.HasOne("BRR.Domain.Entities.Client", null)
+                        .WithMany("Houses")
+                        .HasForeignKey("ClientId1");
+
+                    b.HasOne("BRR.Domain.Entities.HouseType", "HouseType")
+                        .WithMany("Houses")
+                        .HasForeignKey("HouseTypeId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
                     b.Navigation("Client");
+
+                    b.Navigation("HouseType");
+                });
+
+            modelBuilder.Entity("BRR.Domain.Entities.Meeting", b =>
+                {
+                    b.HasOne("BRR.Domain.Entities.Agent", "Agent")
+                        .WithMany("Meetings")
+                        .HasForeignKey("AgentId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("BRR.Domain.Entities.Client", "Client")
+                        .WithMany("Meetings")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("BRR.Domain.Entities.House", "House")
+                        .WithMany("Meetings")
+                        .HasForeignKey("HouseId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Agent");
+
+                    b.Navigation("Client");
+
+                    b.Navigation("House");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
-                    b.HasOne("BRR.Domain.Entities.AppRole", null)
+                    b.HasOne("BRR.Domain.Entities.Role", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -447,7 +603,7 @@ namespace BRR.Infrastructure.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
                 {
-                    b.HasOne("BRR.Domain.Entities.AppUser", null)
+                    b.HasOne("BRR.Domain.Entities.Account", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -456,7 +612,7 @@ namespace BRR.Infrastructure.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
                 {
-                    b.HasOne("BRR.Domain.Entities.AppUser", null)
+                    b.HasOne("BRR.Domain.Entities.Account", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -465,13 +621,13 @@ namespace BRR.Infrastructure.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<int>", b =>
                 {
-                    b.HasOne("BRR.Domain.Entities.AppRole", null)
+                    b.HasOne("BRR.Domain.Entities.Role", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BRR.Domain.Entities.AppUser", null)
+                    b.HasOne("BRR.Domain.Entities.Account", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -480,16 +636,47 @@ namespace BRR.Infrastructure.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
                 {
-                    b.HasOne("BRR.Domain.Entities.AppUser", null)
+                    b.HasOne("BRR.Domain.Entities.Account", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("BRR.Domain.Entities.AppUser", b =>
+            modelBuilder.Entity("BRR.Domain.Entities.Account", b =>
+                {
+                    b.Navigation("Agents");
+
+                    b.Navigation("Clients");
+                });
+
+            modelBuilder.Entity("BRR.Domain.Entities.Agent", b =>
                 {
                     b.Navigation("Clients");
+
+                    b.Navigation("Meetings");
+                });
+
+            modelBuilder.Entity("BRR.Domain.Entities.Client", b =>
+                {
+                    b.Navigation("Houses");
+
+                    b.Navigation("Meetings");
+                });
+
+            modelBuilder.Entity("BRR.Domain.Entities.House", b =>
+                {
+                    b.Navigation("Meetings");
+                });
+
+            modelBuilder.Entity("BRR.Domain.Entities.HouseType", b =>
+                {
+                    b.Navigation("Houses");
+                });
+
+            modelBuilder.Entity("BRR.Domain.Entities.Role", b =>
+                {
+                    b.Navigation("Accounts");
                 });
 #pragma warning restore 612, 618
         }

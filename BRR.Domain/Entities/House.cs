@@ -4,7 +4,8 @@ using System.Net;
 namespace BRR.Domain.Entities;
 
 public sealed class House
-{ 
+{
+    private HashSet<Meeting> _meetings { get; set; } = new();
     private House()
     {
     }
@@ -67,10 +68,10 @@ public sealed class House
         IsAccepted = false;
         IsRejected = true;
     }
-    public void SetClient(AppUser user)
+    public void SetClient(Client client)
     {
-        ClientId = user.Id;
-        Client = user;
+        ClientId = client.Id;
+        Client = client;
     }
     public void Delete () => IsDeleted = true;
     public void UpdateInformation(House house)
@@ -107,9 +108,11 @@ public sealed class House
     public bool HasBalcony { get; private set; }
     public bool IsSold { get; private set; }
     public bool IsAccepted { get; private set; }
-    public int ClientId { get; private set; }
-    public AppUser Client { get; private set; }
-    public bool IsDeleted { get; private set; }
-    public bool OnSale { get; private set; }
     public bool IsRejected { get; private set; }
+    public Client Client { get; private set; }
+    public int ClientId { get; private set; }
+    public int HouseTypeId { get; private set; }
+    public HouseType HouseType { get; set; }
+    public IReadOnlyCollection<Meeting> Meetings => _meetings.ToList();
+    public bool IsDeleted { get; private set; }
 }

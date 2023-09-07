@@ -1,4 +1,8 @@
+using BRR.WebAPI.Mapping;
+using Mapster;
+using MapsterMapper;
 using Microsoft.OpenApi.Models;
+using System.Reflection;
 
 namespace BRR.WebAPI;
 
@@ -53,6 +57,7 @@ public static class ConfigureDependencies
             });
             });
         }
+
 
         return services;
     }

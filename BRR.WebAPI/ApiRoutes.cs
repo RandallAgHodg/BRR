@@ -4,15 +4,13 @@ public static class ApiRoutes
 {
     public const string Root = "api";
 
-    public static class Users
+    public static class Auth
     {
-        private const string Base = $"{Root}/users";
+        private const string Base = $"{Root}/auth";
 
         public const string Login = $"{Base}/login";
 
-        public const string Register = $"{Base}/register";
-
-        public const string AddClient = $"{Base}/add-client";
+        public const string RegisterAgent = $"{Base}/register-agent";
 
         public const string Profile = $"{Base}/profile";
 

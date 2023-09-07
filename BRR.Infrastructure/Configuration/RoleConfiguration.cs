@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace BRR.Infrastructure.Configuration;
 
-public sealed class RoleConfiguration : IEntityTypeConfiguration<IdentityRole>
+public sealed class RoleConfiguration : IEntityTypeConfiguration<Role>
 {
-    public void Configure(EntityTypeBuilder<IdentityRole> builder)
+    public void Configure(EntityTypeBuilder<Role> builder)
     {
         builder.ToTable("Roles");
 
@@ -19,5 +19,11 @@ public sealed class RoleConfiguration : IEntityTypeConfiguration<IdentityRole>
             .IsUnicode(false)
             .IsRequired();
 
+        builder.HasMany(x => x.Accounts)
+            .WithOne(x => x.Role)
+            .HasForeignKey(x => x.RoleId)
+            .OnDelete(DeleteBehavior.NoAction);
+
+        builder.HasData(Role.PopulateDatabase());
     }
 }

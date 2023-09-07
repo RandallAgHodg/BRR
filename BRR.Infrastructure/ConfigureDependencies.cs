@@ -13,12 +13,14 @@ using BRR.Infrastructure.Repositories;
 using BRR.Infrastructure.UOW;
 using BRRR.Infrastructure.Database.Options;
 using CloudinaryDotNet;
+using Mapster;
+using MapsterMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-
+using System.Reflection;
 
 namespace BRR.Infrastructure;
 
@@ -51,7 +53,7 @@ public static class ConfigureDependencies
         services
             .AddSingleton(
             new Cloudinary(
-                new Account(
+                new CloudinaryDotNet.Account(
                     cloudName, cloudApiKey, cloudSecret)));
 
         services.AddSingleton<IFileStorerProvider, FileStorerProvider>();
@@ -86,31 +88,32 @@ public static class ConfigureDependencies
             }
         );
 
-        services.AddScoped<IUserValidator<AppUser>, CustomUserValidator>();
+        services.AddScoped<IUserValidator<Domain.Entities.Account>, CustomUserValidator>();
 
-        services.AddScoped<IUserRepository, UserRepository>();
+        services.AddIdentityCore<Domain.Entities.Account>(options =>
+        {
+            options.Password.RequireNonAlphanumeric = false;
+            options.Password.RequireDigit = false;
+            options.Password.RequireLowercase = false;
+            options.Password.RequiredLength = 1;
+            options.Password.RequireUppercase = false;
+            options.Password.RequireLowercase = false;
+        })
+            .AddRoles<Role>()
+            .AddUserValidator<CustomUserValidator>()
+            .AddEntityFrameworkStores<BRRDbContext>()
+            .AddDefaultTokenProviders();
 
-        services.AddScoped<IHouseRepository, HouseRepository>();    
+        services.AddScoped<IHouseRepository, HouseRepository>();
 
-        services.AddScoped<IFileStorerProvider, FileStorerProvider>();
+        services.AddScoped<IAgentRepository, AgentRepository>();
+
+        //services.AddScoped<IClientRepository, ClientRepository>();
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-        services
-            .AddIdentity<AppUser, AppRole>(options =>
-            {
-                options.Password.RequireNonAlphanumeric = false;
-                options.Password.RequireDigit = false;
-                options.Password.RequireLowercase = false;
-                options.Password.RequiredLength = 1;
-                options.Password.RequireUppercase = false;
-                options.Password.RequireLowercase = false;
-            })
-                .AddEntityFrameworkStores<BRRDbContext>()
-                .AddUserValidator<CustomUserValidator>()
-                .AddDefaultTokenProviders();
+        services.AddScoped<IFileStorerProvider, FileStorerProvider>();
 
-        
         return services;
 
     }

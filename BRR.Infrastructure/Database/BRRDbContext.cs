@@ -5,12 +5,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BRR.Infrastructure.Database;
 
-public sealed class BRRDbContext : IdentityDbContext<AppUser, AppRole, int>
-{
+public sealed class BRRDbContext : IdentityDbContext<Account, Role, int> { 
     public BRRDbContext(DbContextOptions options): base(options)
     {
 
     }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

@@ -1,5 +1,7 @@
 ﻿using BRR.Application.Abstractions.Behaviors;
 using FluentValidation;
+using Mapster;
+using MapsterMapper;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
@@ -18,7 +20,6 @@ public static class ConfigureDependencies
         services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
         //services.AddScoped(typeof(IPipelineBehavior<,>), typeof(GlobalExceptionHandlerBehavior<,>));
-
         services.AddValidatorsFromAssembly(assembly);
 
         return services;

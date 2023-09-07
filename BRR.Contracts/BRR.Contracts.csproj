@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" />
+    <PackageReference Include="BCrypt.Net-Next" />
     <PackageReference Include="CloudinaryDotNet" />
+    <PackageReference Include="Mapster" />
   </ItemGroup>
 </Project>

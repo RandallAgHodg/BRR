@@ -17,11 +17,12 @@ public sealed class JWTProvider : IJWTProvider
     {
         _options = options.Value;
     }
-    public string Create(AppUser user)
+    public string Create(Account account)
     {
         var claims = new Claim[] {
-            new(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-            new(JwtRegisteredClaimNames.Email, user.Email)
+            new(JwtRegisteredClaimNames.Sub, account.Id.ToString()),
+            new(JwtRegisteredClaimNames.Email, account.Email),
+            new("Role", account.Role.Name)
         };
 
         var signinCredentials = new SigningCredentials(
